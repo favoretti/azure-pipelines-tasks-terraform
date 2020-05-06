@@ -6,10 +6,24 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { format } from 'util';
 const uuidV4 = require('uuid/v4');
+const fetch = require('node-fetch');
 const terraformToolName = "terraform";
 
 export async function download(inputVersion: string): Promise<string>{
-    var version = sanitizeVersion(inputVersion);
+    var latestVersion: string = "";
+
+    if(inputVersion == 'latest') {
+        console.log("Getting latest version");
+        await fetch('https://checkpoint-api.hashicorp.com/v1/check/terraform')
+            .then((response: { json: () => any; }) => response.json())
+            .then((data: { [x: string]: any; }) => {
+                latestVersion = data.current_version;
+            })
+            .catch((err: any) => {
+                throw new Error(`Unable to retrieve latest version: ${err}`)
+            })
+    }
+    var version = latestVersion != "" ? sanitizeVersion(latestVersion) : sanitizeVersion(inputVersion);
     var cachedToolPath = tools.findLocalTool(terraformToolName, version);
     if(!cachedToolPath){        
         var url = getDownloadUrl(version);
