@@ -70,7 +70,7 @@
             "type": "connectedService:AzureRM",
             "label": "Environment Azure Subscription",
             "required": false,
-            "visibleRule": "command = plan || command = apply || command = destroy",
+            "visibleRule": "command = plan || command = apply || command = destroy || command = refresh",
             "helpMarkDown": "Select an Azure resource manager subscription for the deployment"
         },
         {

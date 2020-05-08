@@ -6,13 +6,17 @@ import { TerraformRunner } from "./terraform-runner";
 
 export class TerraformRefresh extends TerraformCommand{
     readonly secureVarsFile: string | undefined;
+    readonly environmentServiceName: string;
+
     constructor(
         name: string, 
         workingDirectory: string,
+        environmentServiceName: string,
         options?: string, 
         secureVarsFile?: string) {
         super(name, workingDirectory, options);
         this.secureVarsFile = secureVarsFile;
+        this.environmentServiceName = environmentServiceName;
     }
 }
 
@@ -30,23 +34,25 @@ export class TerraformRefreshHandler implements IHandleCommandString{
     }
 
     public async execute(command: string): Promise<number> {
-        let validate = new TerraformRefresh(
+        let refresh = new TerraformRefresh(
             command,
             tasks.getInput("workingDirectory"),
+            tasks.getInput("environmentServiceName", true),
             tasks.getInput("commandOptions"),
             tasks.getInput("secureVarsFile")
         );
 
         let loggedProps = {
-            "secureVarsFileDefined": validate.secureVarsFile !== undefined && validate.secureVarsFile !== '' && validate.secureVarsFile !== null,
-            "commandOptionsDefined": validate.options !== undefined && validate.options !== '' && validate.options !== null
+            "secureVarsFileDefined": refresh.secureVarsFile !== undefined && refresh.secureVarsFile !== '' && refresh.secureVarsFile !== null,
+            "commandOptionsDefined": refresh.options !== undefined && refresh.options !== '' && refresh.options !== null
         }        
         
-        return this.log.command(validate, (command: TerraformRefresh) => this.onExecute(command), loggedProps);
+        return this.log.command(refresh, (command: TerraformRefresh) => this.onExecute(command), loggedProps);
     }
 
     private async onExecute(command: TerraformRefresh): Promise<number> {
         return new TerraformRunner(command)
+            .withAzureRmProvider(command.environmentServiceName)
             .withSecureVarsFile(this.taskAgent, command.secureVarsFile)
             .exec();
     }
