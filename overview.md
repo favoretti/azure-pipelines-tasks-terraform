@@ -25,6 +25,10 @@ The dedicated `Terraform Installer` task allows for complete control over how fr
 
 ![Terraform Installer Task Definition](https://raw.githubusercontent.com/charleszipp/azure-pipelines-tasks-terraform/master/screenshots/overview-tfinstall-task-fields.jpg)
 
+### (NEW) Support for Installing `Latest` Version
+
+The installer task supports installing the latest terraform version by using the keyword `latest` as the version specified. This is the default option when the installer is added to a pipeline. Specifying latest will instruct the task to lookup and install the latest version of the terraform executable.
+
 ## Contextual Task Configuration
 
 The task definition will adjust to the selected command to prompt for what is relevant to the command. For example, `validate` does not require knowledge of the backend configuration so this section will not be used when executing `validate`. The `validate` command does accept vars file however. Therefore, the field to specify vars file will be available.
