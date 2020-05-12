@@ -31,7 +31,6 @@
       "name": "downloadUrl",
       "type": "string",
       "label": "Download URL",
-      "defaultValue": "",
       "required": false,
       "helpMarkDown": "(optional) Specify a custom URL to pull terraform from. Defaults to HashiCorp"
     }

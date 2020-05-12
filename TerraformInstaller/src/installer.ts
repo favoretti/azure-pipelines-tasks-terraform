@@ -26,12 +26,7 @@ export async function download(inputVersion: string, downloadUrl: string): Promi
     var version = latestVersion != "" ? sanitizeVersion(latestVersion) : sanitizeVersion(inputVersion);
     var cachedToolPath = tools.findLocalTool(terraformToolName, version);
     if(!cachedToolPath){
-        var url: string;
-        if(downloadUrl) {
-            url = downloadUrl;
-        } else {
-            url = getDownloadUrl(version);
-        }
+        const url = downloadUrl || getDownloadUrl(version)
         console.log("Terraform not installed, downloading from: ", url);
         var fileName = `${terraformToolName}-${version}-${uuidV4()}.zip`;
         console.log("Terraform file name as: ", fileName);
