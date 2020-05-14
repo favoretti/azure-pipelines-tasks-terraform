@@ -108,7 +108,8 @@
             "helpMarkDown": "Select the terraform backend type to use.",
             "options": {
                 "local": "local",
-                "azurerm": "azurerm"
+                "azurerm": "azurerm",
+                "selfConfigured": "self-configured"
             },
             "properties": {
                 "EditableOptions": "False"
